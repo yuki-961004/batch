@@ -9,14 +9,7 @@
 #'
 mcshr_rwddm_test <- function(list, Target, Paper_ID) {
 
-  r_values_v <- list()
-  r_values_z <- list()
-
-  for(j in 1:length(list)) {
-
-    ################################################################################
-
-    SPE_half_1 <- list[[j]][[1]] %>%
+    SPE_half_1 <- list[[1]] %>%
       # RWiener::wdm 只识别lower upper
       dplyr::mutate(ACC = case_when(ACC == 0 ~ "lower",
                                     ACC == 1 ~ "upper")) %>%
@@ -50,7 +43,7 @@ mcshr_rwddm_test <- function(list, Target, Paper_ID) {
       }) %>%
       base::do.call(rbind, .)
 
-    SPE_half_2 <- list[[j]][[2]] %>%
+    SPE_half_2 <- list[[2]] %>%
       # RWiener::wdm 只识别lower upper
       dplyr::mutate(ACC = case_when(ACC == 0 ~ "lower",
                                     ACC == 1 ~ "upper")) %>%
@@ -107,7 +100,7 @@ mcshr_rwddm_test <- function(list, Target, Paper_ID) {
       dplyr::filter(!is.na(v_SPE_1) & !is.na(v_SPE_2)) %>%
       dplyr::filter(is.finite(v_SPE_1) & is.finite(v_SPE_2))
 
-    r_values_v[j] <- cor(df_cor_v[,3], df_cor_v[,4], method = "pearson")
+    r_values_v <- cor(df_cor_v[,3], df_cor_v[,4], method = "pearson")
 
     ################################################################################
 
@@ -132,12 +125,10 @@ mcshr_rwddm_test <- function(list, Target, Paper_ID) {
       dplyr::filter(!is.na(z_SPE_1) & !is.na(z_SPE_2)) %>%
       dplyr::filter(is.finite(z_SPE_1) & is.finite(z_SPE_2))
 
-    r_values_z[j] <- cor(df_cor_z[,3], df_cor_z[,4], method = "pearson")
-  }
+    r_values_z <- cor(df_cor_z[,3], df_cor_z[,4], method = "pearson")
 
-  # Calculate the mean of the Pearson correlation coefficients
-  r_values_vector_v <- unlist(r_values_v)
-  r_values_vector_z <- unlist(r_values_z)
-  df_result <- data.frame(v = r_values_vector_v, z = r_values_vector_z)
+
+    # Calculate the mean of the Pearson correlation coefficients
+    df_result <- data.frame(v = r_values_v[,1], z = r_values_z[,1])
   return(df_result)
 }
