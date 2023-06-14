@@ -1,3 +1,10 @@
+#' Title
+#'
+#' @param df
+#'
+#' @return wdm result
+#' @export 结果
+#'
 rwddm <- function(df) {
   df <- df %>%
     tidyr::unite(group, Subject, Matching, Identity, Session, sep = "_") %>%
@@ -12,14 +19,12 @@ rwddm <- function(df) {
     tidyr::pivot_wider(names_from = Indice,
                        values_from = temp.coefficients) %>%
     dplyr::mutate(a = round(alpha, 3),
-                  t = round(tau, 3), 
-                  z = round(beta, 3), 
+                  t = round(tau, 3),
+                  z = round(beta, 3),
                   v = round(delta, 3),
                   Subject = as.numeric(Subject),
-                  Matching = factor(Matching,
-                                    levels = c("Matching", "Nonmatching")),
-                  Identity = factor(Identity,
-                                    levels = c("Self", "Friend", "Stranger")),
+                  Matching = factor(Matching),
+                  Identity = factor(Identity),
                   Session = as.character(Session)
     ) %>%
     dplyr::arrange(Subject, Matching, Identity, Session) %>%
