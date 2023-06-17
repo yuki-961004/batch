@@ -1,53 +1,54 @@
 #' Title
 #'
-#' @param list list
-#' @param Target target
+#' @param list list of mc shr
+#' @param Target Friend Stranger and ...
 #' @param Paper_ID Paper_ID
+#' @param nc number of cores
 #'
 #' @return 结果
 #' @export 结果
 #'
-mcshr_rt <- function(list, Target, Paper_ID) {
+mcshr_rt <- function(list, Target, Paper_ID, nc) {
 
-  r_values <- list()
+  # 设置并行计算
+  registerDoParallel(cores = nc)
 
-  for(j in 1:length(list)) {
+  # 初始化一个空的数据框
+  df_output <- data.frame()
 
-    SPE_half_1 <- list[[j]][[1]] %>%
-      dplyr::filter(., Matching == "Matching", ACC == "1") %>%
-      dplyr::group_by(Subject, Session, Identity) %>%
-      dplyr::summarise(mean_rt = mean(RT_ms)) %>%
-      dplyr::ungroup() %>%
-      tidyr::pivot_wider(names_from = Identity,
-                         values_from = mean_rt) %>%
-      dplyr::mutate(rt_1_SPE_1 = Self - !!sym(Target)) %>%
-      dplyr::select(Subject, Session, rt_1_SPE_1)
+  # 获取列表的长度
+  list_length <- length(list)
 
-    SPE_half_2 <- list[[j]][[2]] %>%
-      dplyr::filter(., Matching == "Matching", ACC == "1") %>%
-      dplyr::group_by(Subject, Session, Identity) %>%
-      dplyr::summarise(mean_rt = mean(RT_ms)) %>%
-      dplyr::ungroup() %>%
-      tidyr::pivot_wider(names_from = Identity,
-                         values_from = mean_rt) %>%
-      dplyr::mutate(rt_1_SPE_2 = Self - !!sym(Target)) %>%
-      dplyr::select(Subject, Session, rt_1_SPE_2)
+  # 定义每次迭代处理的元素个数
+  subset_size <- nc
 
-    df.cor <- SPE_half_1 %>%
-      dplyr::left_join(SPE_half_2, by = c("Subject", "Session")) %>%
-      dplyr::filter(!is.na(rt_1_SPE_1) & !is.na(rt_1_SPE_2)) %>%
-      dplyr::filter(is.finite(rt_1_SPE_1) & is.finite(rt_1_SPE_2))
+  # 循环遍历选取nc个元素的列表
+  for (i in 1:ceiling(list_length / subset_size)) {
+    # 计算当前迭代需要处理的元素范围
+    start_index <- (subset_size * (i - 1)) + 1
+    end_index <- min(subset_size * i, list_length)
 
-    cor(df.cor[,3], df.cor[,4], method = "pearson")
+    # 从列表中选取当前迭代需要处理的元素
+    list_subset <- list[start_index:end_index]
 
-    r_values[j] <- cor(df.cor[,3], df.cor[,4], method = "pearson")
+    # 使用foreach循环并行执行迭代
+    output <- foreach(j = 1:length(list_subset), .combine = rbind, .packages = c("dplyr", "tidyr", "yukiBP")) %dopar% {
+
+      # 调用函数并得到数据框
+      result <- yukiBP::shr_rt(list = list_subset[[j]], Target = Target) %>%
+        dplyr::mutate(Iteration = j,
+                      Paper_ID = Paper_ID)
+
+      return(result)
+
+    }
+
+    # 合并每次得到的结果
+    df_output <- bind_rows(df_output, output)
   }
 
-  # Calculate the mean of the Pearson correlation coefficients
-  r_values_vector <- unlist(r_values)
-  r <- mean(r_values_vector)
-  CI <- quantile(r_values_vector, c(0.025, 0.975))
+  # 停止并行计算
+  stopImplicitCluster()
 
-  values <- data.frame("Indice" = "RT", "r" = r, "LLCI" = CI[1], "ULCI" = CI[2], "Target" = Target, "Paper_ID" = Paper_ID)
-  return(values)
+  return(df_output)
 }

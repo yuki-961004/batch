@@ -4,14 +4,16 @@
 \alias{mcshr_rt}
 \title{Title}
 \usage{
-mcshr_rt(list, Target, Paper_ID)
+mcshr_rt(list, Target, Paper_ID, nc)
 }
 \arguments{
-\item{list}{list}
+\item{list}{list of mc shr}
 
-\item{Target}{target}
+\item{Target}{Friend Stranger and ...}
 
 \item{Paper_ID}{Paper_ID}
+
+\item{nc}{number of cores}
 }
 \value{
 结果
