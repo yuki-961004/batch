@@ -8,7 +8,7 @@
 #' @return 结果
 #' @export 结果
 #'
-mcshr_rt <- function(list, Target, Paper_ID, nc) {
+loop_shr_rt <- function(list, Target, Paper_ID, nc) {
 
   # 设置并行计算
   registerDoParallel(cores = nc)
