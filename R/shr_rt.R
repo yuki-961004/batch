@@ -10,7 +10,7 @@ shr_rt <- function(list, Target) {
 
   # 计算每个Identity下的参数值(参数可能是RT, ACC, D, EFF, DDMV, DDMZ)
   Half_1 <- list[[1]] %>%
-    dplyr::filter(., Matching == "Matching", ACC == "1") %>%
+    dplyr::filter(., Matching == "Matching") %>%
     dplyr::group_by(Subject, Session, Identity) %>%
     dplyr::summarise(mean_rt = mean(RT_ms)) %>%
     dplyr::ungroup() %>%
@@ -18,7 +18,7 @@ shr_rt <- function(list, Target) {
                        values_from = mean_rt)
 
   Half_2 <- list[[2]] %>%
-    dplyr::filter(., Matching == "Matching", ACC == "1") %>%
+    dplyr::filter(., Matching == "Matching") %>%
     dplyr::group_by(Subject, Session, Identity) %>%
     dplyr::summarise(mean_rt = mean(RT_ms)) %>%
     dplyr::ungroup() %>%
