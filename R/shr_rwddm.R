@@ -78,7 +78,7 @@ shr_rwddm <- function(list, Target) {
   result_v <- rbind(r_v) %>%
     as.data.frame() %>%
     `rownames<-`(NULL) %>%
-    dplyr::mutate(Indice = "v")
+    dplyr::mutate(Indice = "rw_v")
 
   ################################################################################
 
@@ -121,7 +121,7 @@ shr_rwddm <- function(list, Target) {
   result_z <- rbind(r_z) %>%
     as.data.frame() %>%
     `rownames<-`(NULL) %>%
-    dplyr::mutate(Indice = "z")
+    dplyr::mutate(Indice = "rw_z")
 
   # 合并v和z的data frame
   output <- bind_rows(result_v, result_z)
