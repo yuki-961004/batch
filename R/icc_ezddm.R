@@ -6,17 +6,18 @@
 #' @return output
 #' @export 结果
 
-icc_rwddm <- function(df, Target) {
+icc_ezddm <- function(df, Target) {
   df <- df %>%
+    # 不关心Nonmatching组的情况，提前筛选掉，提高运行速度
     dplyr::filter(Matching == "Matching") %>%
-    # RWiener::wdm 只识别lower upper
-    dplyr::mutate(ACC = case_when(ACC == 0 ~ "lower",
-                                  ACC == 1 ~ "upper")) %>%
-    # RWiener::wdm 只接受一个分组变量
-    split(.$Subject) %>%
-    # 执行wdm，然后将分割的结果重新组合
-    base::lapply(., rwddm) %>%
-    base::do.call(rbind, .)
+    ###############################CORE CODES###################################
+    hausekeep::fit_ezddm(data = ., rts = "RT_sec", responses = "ACC",
+                         id = "Subject", group = c("Session", "Matching", "Identity")) %>%
+    ###############################CORE CODES###################################
+    dplyr::mutate(z = a / 2,
+                  t = t0_Ter) %>%
+    dplyr::select(Subject, Session, Matching, Identity, a, t, v, z)
+
 
   df_v <- df %>%
     dplyr::select(Subject, Session, Matching, Identity, v) %>%

@@ -4,18 +4,20 @@
 \alias{shr}
 \title{Title}
 \usage{
-shr(list, indice, Target, Paper_ID, mc = FALSE)
+shr(list, Target, Paper_ID, Indice, mc = FALSE, nc = 3)
 }
 \arguments{
-\item{list}{list}
+\item{list}{对象}
 
-\item{indice}{indice ("rc", "acc", "dp", "eff", "ddmv", "ddmz")}
+\item{Target}{Identity有几种情况}
 
-\item{Target}{target}
+\item{Paper_ID}{文章的序号}
 
-\item{Paper_ID}{Paper_ID}
+\item{Indice}{这次分析的指标是什么indice ("rc", "acc", "dp", "eff", "ezddm", "rwddm")}
 
-\item{mc}{Monte Carlo or not}
+\item{mc}{是否是蒙特卡洛的list}
+
+\item{nc}{需要用多少个核心。普通分半建议3个，蒙特卡洛分半则使用最大值}
 }
 \value{
 结果

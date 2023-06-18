@@ -7,7 +7,7 @@
 rwddm(df)
 }
 \arguments{
-\item{df}{}
+\item{df}{data frame}
 }
 \value{
 wdm result

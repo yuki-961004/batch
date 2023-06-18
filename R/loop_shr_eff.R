@@ -10,7 +10,7 @@
 #' @return 结果
 #' @export 结果
 #'
-loop_shr_rt <- function(list, Target, Paper_ID, Indice, nc) {
+loop_shr_eff <- function(list, Target, Paper_ID, Indice, nc) {
 
   # 设置并行计算
   registerDoParallel(cores = nc)
@@ -37,7 +37,7 @@ loop_shr_rt <- function(list, Target, Paper_ID, Indice, nc) {
     output <- foreach(j = 1:length(list_subset), .combine = rbind, .packages = c("dplyr", "tidyr", "yukiBP")) %dopar% {
 
       # 调用函数并得到数据框
-      result <- yukiBP::shr_rt(list = list_subset[[j]], Target = Target) %>%
+      result <- yukiBP::shr_eff(list = list_subset[[j]], Target = Target) %>%
         dplyr::mutate(Iteration = (i - 1) * nc + j,
                       Paper_ID = Paper_ID,
                       Indice = Indice)

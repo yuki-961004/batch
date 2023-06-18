@@ -1,6 +1,6 @@
 #' Title
 #'
-#' @param df
+#' @param df data frame
 #'
 #' @return wdm result
 #' @export 结果

@@ -4,12 +4,12 @@
 \alias{icc}
 \title{Title}
 \usage{
-icc(df, indice, Target)
+icc(df, Indice, Target)
 }
 \arguments{
 \item{df}{df}
 
-\item{indice}{indice ("rc", "acc", "dp", "eff", "ddmv", "ddmz")}
+\item{Indice}{indice ("rc", "acc", "dp", "eff", "ddmv", "ddmz")}
 
 \item{Target}{target}
 }

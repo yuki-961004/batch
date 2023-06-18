@@ -4,7 +4,7 @@
 \alias{loop_shr_rt}
 \title{Title}
 \usage{
-loop_shr_rt(list, Target, Paper_ID, nc)
+loop_shr_rt(list, Target, Paper_ID, Indice, nc)
 }
 \arguments{
 \item{list}{list of mc shr}
@@ -12,6 +12,8 @@ loop_shr_rt(list, Target, Paper_ID, nc)
 \item{Target}{Friend Stranger and ...}
 
 \item{Paper_ID}{Paper_ID}
+
+\item{Indice}{indice ("rc", "acc", "dp", "eff", "ezddm", "rwddm")}
 
 \item{nc}{number of cores}
 }
