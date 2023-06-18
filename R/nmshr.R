@@ -20,7 +20,7 @@ nmshr <- function(list, Target, Paper_ID, Indice, nc) {
                    stop("Invalid indice argument")
                    )
 
-  output <- df_rt %>%
+  output <- result %>%
     tidyr::pivot_longer(cols = Target[2:length(Target)], names_to = "Target", values_to = "r") %>%
     dplyr::mutate(r = as.numeric(r)) %>%
     dplyr::mutate(Method = case_when(Iteration == 1 ~ "First-Second",
