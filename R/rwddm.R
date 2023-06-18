@@ -28,6 +28,6 @@ rwddm <- function(df) {
                   Session = as.character(Session)
     ) %>%
     dplyr::arrange(Subject, Matching, Identity, Session) %>%
-    dplyr::select(Subject, Matching, Identity, Session, a, t, z, v)
+    dplyr::select(Subject, Matching, Identity, Session, a, t, v, z)
   return(result)
 }
