@@ -23,7 +23,7 @@ mcshr <- function(list, Target, Paper_ID, Indice, nc) {
   output <- result %>%
     tidyr::pivot_longer(cols = Target[2:length(Target)], names_to = "Target", values_to = "r") %>%
     dplyr::mutate(r = as.numeric(r)) %>%
-    dplyr::group_by(Target) %>%
+    dplyr::group_by(Target, Indice) %>%
     dplyr::mutate(Mean = mean(r),
                   LLCI = quantile(r, 0.025),
                   ULCI = quantile(r, 0.975),
