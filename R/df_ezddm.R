@@ -17,7 +17,7 @@ df_ezddm <- function(df,i) {
     dplyr::mutate(z = a / 2,
                   t = t0_Ter) %>%
     dplyr::select(Subject, Session, Matching, Identity, a, t, v, z) %>%
-    tidyr::drop_na() %>%
+    dplyr::filter(!if_any(everything(), ~ is.na(.x) | is.infinite(.x))) %>%
     dplyr::group_by(Identity) %>%
     dplyr::summarise(v_mean = mean(v),
                      v_sd = sd(v),

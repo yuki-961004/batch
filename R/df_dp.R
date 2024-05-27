@@ -26,8 +26,8 @@ df_dp <- function(df,i) {
         )
       )) %>%
     dplyr::ungroup() %>%
-    select(-"hit",-"fa",-"miss",-"cr")%>%
-    tidyr::drop_na() %>%
+    dplyr::select(-"hit",-"fa",-"miss",-"cr")%>%
+    dplyr::filter(!if_any(everything(), ~ is.na(.x) | is.infinite(.x))) %>%
     dplyr::group_by(Identity) %>%
     dplyr::summarise(d_mean = mean(Dprime),
                      d_sd = sd(Dprime)) %>%

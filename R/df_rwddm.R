@@ -20,7 +20,7 @@ df_rwddm <- function(df,i) {
     ###############################CORE CODES###################################
     # 将分割的结果重新组合
     base::do.call(rbind, .) %>%
-    tidyr::drop_na() %>%
+    dplyr::filter(!if_any(everything(), ~ is.na(.x) | is.infinite(.x))) %>%
     dplyr::group_by(Identity) %>%
     dplyr::summarise(v_mean = mean(v),
                      v_sd = sd(v),

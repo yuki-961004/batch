@@ -12,7 +12,7 @@ df_eta <- function(df,i) {
     dplyr::group_by(Subject, Identity, Session) %>%
     dplyr::summarise(Eff = mean(RT_ms)/mean(ACC))%>%
     dplyr::ungroup() %>%
-    tidyr::drop_na() %>%
+    dplyr::filter(!if_any(everything(), ~ is.na(.x) | is.infinite(.x))) %>%
     dplyr::group_by(Identity) %>%
     dplyr::summarise(eta_mean = mean(Eff),
                      eta_sd = sd(Eff)) %>%

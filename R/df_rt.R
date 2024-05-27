@@ -12,7 +12,7 @@ df_rt <- function(df,i) {
     dplyr::group_by(Subject, Session, Identity) %>%
     dplyr::summarise(mean_rt = mean(RT_ms)) %>%
     dplyr::ungroup() %>%
-    tidyr::drop_na() %>%
+    dplyr::filter(!if_any(everything(), ~ is.na(.x) | is.infinite(.x))) %>%
     dplyr::group_by(Identity) %>%
     dplyr::summarise(RT_mean = mean(mean_rt),
                      RT_sd = sd(mean_rt)) %>%
